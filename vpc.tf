@@ -4,7 +4,7 @@
 resource "aws_vpc" "pcfw-foundations-vpc" {
   cidr_block = var.vpc.pcfw_foundations_vpc.cidr_block
   tags = {
-    Name                 = var.vpc.pcfw_foundations_vpc.name
+    Name = var.vpc.pcfw_foundations_vpc.name
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_subnet" "public-subnet" {
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
   availability_zone = "us-west-2a"
   tags = {
-    Name                 = "public-subnet"
+    Name = "public-subnet"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "private-subnet" {
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
   availability_zone = "us-west-2a"
   tags = {
-    Name      = "private-subnet"
+    Name = "private-subnet"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_subnet" "private2-subnet" {
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
   availability_zone = "us-west-2c"
   tags = {
-    Name                 = "private2-subnet"
+    Name = "private2-subnet"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private2-subnet" {
 resource "aws_internet_gateway" "pcfw-foundations-igw" {
   vpc_id = aws_vpc.pcfw-foundations-vpc.id
   tags = {
-    Name                 = "pcfw-foundations-igw"
+    Name = "pcfw-foundations-igw"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_nat_gateway" "pcfw-foundations-nat-gw" {
   allocation_id = aws_eip.pcfw-foundations-eip.id
   subnet_id     = aws_subnet.public-subnet.id
   tags = {
-    Name                 = "pcfw-foundations-nat-gw"
+    Name = "pcfw-foundations-nat-gw"
   }
 }
 
@@ -59,6 +59,7 @@ resource "aws_nat_gateway" "pcfw-foundations-nat-gw" {
 resource "aws_eip" "pcfw-foundations-eip" {
   vpc = true
   tags = {
+    Name = "pcfw-eip-natgw"
   }
 }
 
@@ -66,7 +67,7 @@ resource "aws_eip" "pcfw-foundations-eip" {
 resource "aws_route_table" "pcfw-private" {
   vpc_id = aws_vpc.pcfw-foundations-vpc.id
   tags = {
-    Name                 = "pcfw-private"
+    Name = "pcfw-private"
   }
 }
 
@@ -81,7 +82,7 @@ resource "aws_route" "private_default_route" {
 resource "aws_route_table" "pcfw-public" {
   vpc_id = aws_vpc.pcfw-foundations-vpc.id
   tags = {
-    Name                 = "pcfw-public"
+    Name = "pcfw-public"
   }
 }
 
