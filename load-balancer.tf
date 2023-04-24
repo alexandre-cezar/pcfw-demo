@@ -8,8 +8,8 @@ resource "aws_lb" "pcfw-lb" {
   ]
 }
 
-resource "aws_lb_target_group" "pcfw-tg" {
-  name_prefix = "pcfw-tg"
+resource "aws_lb_target_group" "pcfwtg" {
+  name_prefix = "pcfwtg"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.pcfw-foundations-vpc.id
@@ -23,19 +23,19 @@ resource "aws_lb_target_group" "pcfw-tg" {
   }
 }
 
-resource "aws_lb_listener" "pcfw-listener" {
+resource "aws_lb_listener" "pcfwlistener" {
   load_balancer_arn = aws_lb.pcfw-lb.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.pcfw-tg.arn
+    target_group_arn = aws_lb_target_group.pcfwtg.arn
   }
 }
 
-resource "aws_launch_configuration" "pcfw-lc" {
-  name_prefix   = "pcfw-lc"
+resource "aws_launch_configuration" "pcfwlc" {
+  name_prefix   = "pcfwlc"
   image_id      = var.internal_ami
   instance_type = var.internal_instance_type
 
@@ -52,8 +52,8 @@ resource "aws_autoscaling_group" "pcfw-asg" {
   min_size             = 1
   desired_capacity     = 2
   health_check_grace_period = 300
-  launch_configuration = aws_launch_configuration.pcfw-lc.id
-  target_group_arns     = [aws_lb_target_group.pcfw-tg.arn]
+  launch_configuration = aws_launch_configuration.pcfwlc.id
+  target_group_arns     = [aws_lb_target_group.pcfwtg.arn]
   vpc_zone_identifier   = [aws_subnet.private-subnet.id, aws_subnet.private2-subnet.id]
 
   lifecycle {
