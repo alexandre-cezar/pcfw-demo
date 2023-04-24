@@ -12,6 +12,7 @@ resource "aws_vpc" "pcfw-foundations-vpc" {
 resource "aws_subnet" "public-subnet" {
   cidr_block = var.public_subnet.cidr_block
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
+  availability_zone = "us-west-2a"
   tags = {
     Name                 = "public-subnet"
   }
@@ -21,6 +22,7 @@ resource "aws_subnet" "public-subnet" {
 resource "aws_subnet" "private-subnet" {
   cidr_block = var.internal_subnet.cidr_block
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
+  availability_zone = "us-west-2a"
   tags = {
     Name      = "private-subnet"
   }
@@ -30,6 +32,7 @@ resource "aws_subnet" "private-subnet" {
 resource "aws_subnet" "private2-subnet" {
   cidr_block = var.internal2_subnet.cidr_block
   vpc_id     = aws_vpc.pcfw-foundations-vpc.id
+  availability_zone = "us-west-2c"
   tags = {
     Name                 = "private2-subnet"
   }
