@@ -58,6 +58,30 @@ variable "internal2_subnet" {
   }
 }
 
+#LB1 Subnet naming and CIDR configuration
+variable "lb1_subnet" {
+  type = object({
+    name = string
+    cidr_block = string
+  })
+  default = {
+    name = "lb1-subnet"
+    cidr_block = "172.20.4.0/24"
+  }
+}
+
+#LB2 Subnet naming and CIDR configuration
+variable "lb2_subnet" {
+  type = object({
+    name = string
+    cidr_block = string
+  })
+  default = {
+    name = "lb2-subnet"
+    cidr_block = "172.20.5.0/24"
+  }
+}
+
 #AMI ID that is going to be used by the vulnerable instance (region dependent)
 variable "vulnerable_ami" {
   type    = string

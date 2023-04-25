@@ -38,6 +38,26 @@ resource "aws_subnet" "private2-subnet" {
   }
 }
 
+#Creates the 1st LB subnet using the variable lb1 subnet object definitions
+resource "aws_subnet" "lb1-subnet" {
+  cidr_block = var.lb1_subnet.cidr_block
+  vpc_id     = aws_vpc.pcfw-foundations-vpc.id
+  availability_zone = "us-west-2a"
+  tags = {
+    Name = "lb1-subnet"
+  }
+}
+
+#Creates the 2nd LB subnet using the variable lb1 subnet object definitions
+resource "aws_subnet" "lb2-subnet" {
+  cidr_block = var.lb2_subnet.cidr_block
+  vpc_id     = aws_vpc.pcfw-foundations-vpc.id
+  availability_zone = "us-west-2c"
+  tags = {
+    Name = "lb2-subnet"
+  }
+}
+
 #Creates the Internet Gateway
 resource "aws_internet_gateway" "pcfw-foundations-igw" {
   vpc_id = aws_vpc.pcfw-foundations-vpc.id

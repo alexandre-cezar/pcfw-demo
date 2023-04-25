@@ -3,8 +3,8 @@ resource "aws_lb" "pcfw-lb" {
   internal           = false
   load_balancer_type = "application"
   subnets            = [
-    aws_subnet.private-subnet.id,
-    aws_subnet.private2-subnet.id
+    aws_subnet.lb1-subnet.id,
+    aws_subnet.lb2-subnet.id
   ]
 }
 
