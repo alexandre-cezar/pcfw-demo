@@ -53,8 +53,8 @@ resource "aws_autoscaling_group" "pcfw-asg" {
   desired_capacity     = 2
   health_check_grace_period = 300
   launch_configuration = aws_launch_configuration.pcfwlc.id
+  vpc_zone_identifier  = [aws_subnet.private-subnet.id, aws_subnet.private2-subnet.id]
   target_group_arns     = [aws_lb_target_group.pcfwtg.arn]
-  availability_zones   = ["us-west-2a", "us-west-2c"]
 
   lifecycle {
     create_before_destroy = true
