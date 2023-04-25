@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8512d3bc-e311-4184-92ab-f47009c67f1c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/vpc.tf" beforeDir="false" afterPath="$PROJECT_DIR$/vpc.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ec2-EIP.tf" beforeDir="false" afterPath="$PROJECT_DIR$/ec2-EIP.tf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

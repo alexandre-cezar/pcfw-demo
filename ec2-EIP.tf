@@ -17,7 +17,7 @@ resource "aws_iam_role" "pcfw-insecure-role" {
     ]
   })
   tags = {
-    Name                 = "pcfw-insecure-role"
+    Name = "pcfw-insecure-role"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_iam_instance_profile" "pcfw-insecure-profile" {
   name = "pcfw-insecure-profile"
   role = aws_iam_role.pcfw-insecure-role.name
   tags = {
-    Name                 = "pcfw-insecure-profile"
+    Name = "pcfw-insecure-profile"
   }
 }
 
@@ -55,7 +55,7 @@ resource "aws_iam_policy" "pcfw-insecure-policy" {
     ]
   })
   tags = {
-    Name                 = "pcfw-insecure-policy"
+    Name = "pcfw-insecure-policy"
   }
 }
 
@@ -77,7 +77,7 @@ resource "aws_eip" "bastion" {
   instance = aws_instance.bastion.id
   vpc      = true
   tags = {
-    Name                 = "pcfw-eip-bastion"
+    Name = "pcfw-eip-bastion"
   }
 }
 
@@ -101,7 +101,7 @@ resource "aws_eip" "vulnerable" {
   instance = aws_instance.vulnerable.id
   vpc      = true
   tags = {
-    Name                 = "pcfw-eip-vulnerable"
+    Name = "pcfw-eip-vulnerable"
   }
 }
 
@@ -121,7 +121,7 @@ resource "aws_instance" "internal" {
     systemctl enable httpd
   EOF
   tags = {
-    Name                 = "pcfw-internal"
+    Name = "pcfw-internal"
   }
   depends_on = [aws_vpc.pcfw-foundations-vpc]
 }
@@ -129,13 +129,6 @@ resource "aws_instance" "internal" {
 resource "aws_security_group" "bastion_sg" {
   name   = "bastion_sg"
   vpc_id = aws_vpc.pcfw-foundations-vpc.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   egress {
     from_port   = 80
@@ -165,20 +158,13 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block]
   }
   tags = {
-    Name                 = "pcfw-bastion-sg"
+    Name = "pcfw-bastion-sg"
   }
 }
 
 resource "aws_security_group" "vulnerable_sg" {
   name   = "vulnerable_sg"
   vpc_id = aws_vpc.pcfw-foundations-vpc.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   ingress {
     from_port   = 8080
@@ -188,8 +174,15 @@ resource "aws_security_group" "vulnerable_sg" {
   }
 
   ingress {
-    from_port   = 3606
-    to_port     = 3606
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -209,7 +202,7 @@ resource "aws_security_group" "vulnerable_sg" {
   }
 
   tags = {
-    Name                 = "pcfw-vulnerable-sg"
+    Name = "pcfw-vulnerable-sg"
   }
 }
 
@@ -221,14 +214,14 @@ resource "aws_security_group" "internal_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block]
+    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block, aws_subnet.lb1-subnet.cidr_block, aws_subnet.lb2-subnet.cidr_block]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block]
+    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block, aws_subnet.lb1-subnet.cidr_block, aws_subnet.lb2-subnet.cidr_block]
   }
 
   egress {
@@ -249,16 +242,16 @@ resource "aws_security_group" "internal_sg" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block]
+    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block, aws_subnet.lb1-subnet.cidr_block, aws_subnet.lb2-subnet.cidr_block]
   }
 
   egress {
     from_port   = 0
     to_port     = 65535
     protocol    = "udp"
-    cidr_blocks = [aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block]
+    cidr_blocks = [aws_subnet.public-subnet.cidr_block, aws_subnet.private-subnet.cidr_block, aws_subnet.private2-subnet.cidr_block, aws_subnet.lb1-subnet.cidr_block, aws_subnet.lb2-subnet.cidr_block]
   }
   tags = {
-    Name                 = "pcfw-internal-sg"
+    Name = "pcfw-internal-sg"
   }
 }
