@@ -130,3 +130,30 @@ resource "aws_route_table_association" "public_association" {
   subnet_id      = aws_subnet.public-subnet.id
   route_table_id = aws_route_table.pcfw-public.id
 }
+
+#Creates the lb subnets routing table
+resource "aws_route_table" "pcfw-lb" {
+  vpc_id = aws_vpc.pcfw-foundations-vpc.id
+  tags = {
+    Name = "pcfw-lb"
+  }
+}
+
+#Configures the default route of lb subnet pointing to the Internet Gateway
+resource "aws_route" "public_default_route" {
+  route_table_id         = aws_route_table.pcfw-lb.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.pcfw-foundations-igw.id
+}
+
+#Associates the lb route table with the lb1 subnet
+resource "aws_route_table_association" "lb_association" {
+  subnet_id      = aws_subnet.lb1-subnet.id
+  route_table_id = aws_route_table.pcfw-lb.id
+}
+
+#Associates the lb route table with the lb2 subnet
+resource "aws_route_table_association" "lb_association" {
+  subnet_id      = aws_subnet.lb2-subnet.id
+  route_table_id = aws_route_table.pcfw-lb.id
+}
